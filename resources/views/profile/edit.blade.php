@@ -1,29 +1,32 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+@section('content')
+<h1>Edit Profil</h1>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+@if(session('success'))
+    <p style="color: green;">{{ session('success') }}</p>
+@endif
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
-        </div>
+<form action="{{ route('profile.update') }}" method="POST">
+    @csrf
+    @method('PUT')
+
+    <div style="margin-bottom: 15px;">
+        <label>Nama Lengkap:</label><br>
+        <input type="text" name="name" value="{{ old('name', $user->name) }}" required style="width: 100%; padding: 8px;">
     </div>
-</x-app-layout>
+
+    <div style="margin-bottom: 15px;">
+        <label>No. Telepon:</label><br>
+        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label>Alamat:</label><br>
+        <textarea name="address" style="width: 100%; padding: 8px;">{{ old('address', $user->address) }}</textarea>
+    </div>
+
+    <button type="submit">Simpan Perubahan</button>
+    <a href="{{ route('menu.index') }}">Batal</a>
+</form>
+@endsection

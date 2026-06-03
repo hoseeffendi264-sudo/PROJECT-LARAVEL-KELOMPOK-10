@@ -1,6 +1,10 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Order;
+use App\Models\OrderItem;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -19,5 +23,30 @@ class OrderController extends Controller
             ->where('user_id', Auth::id())
             ->firstOrFail();
         return view('orders.show', compact('order'));
+    }
+
+    public function track($id)
+    {
+        $order = Order::with('items')->findOrFail($id);
+        
+        if ($order->user_id != Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        return view('orders.track', compact('order'));
+    }
+
+    public function paymentProcess($id)
+    {
+        $order = Order::findOrFail($id);
+
+        if ($order->user_id != Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $order->update(['status' => 'processing']);
+
+        return redirect()->route('order.track', $order->id)
+            ->with('success', 'Pembayaran berhasil! Pesanan sedang diproses.');
     }
 }
