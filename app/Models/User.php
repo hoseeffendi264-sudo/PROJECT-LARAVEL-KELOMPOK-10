@@ -53,4 +53,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    // Blog Post (Worksheet 5): Satu user bisa punya banyak post
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

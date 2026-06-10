@@ -85,7 +85,7 @@ class CartController extends Controller
         }
 
         $order = Order::create([
-            'user_id'          => Auth::id(), // Null jika guest, tapi kita paksa login di route nanti
+            'user_id'          => Auth::id(),
             'customer_name'    => $request->name,
             'customer_phone'   => $request->phone,
             'customer_address' => $request->address,
